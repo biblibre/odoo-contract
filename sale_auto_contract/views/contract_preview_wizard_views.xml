@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sale_auto_contract_preview_form_view" model="ir.ui.view">
+        <field name="name">sale.auto.contract.preview.form</field>
+        <field name="model">sale.auto.contract.preview</field>
+        <field name="arch" type="xml">
+            <form string="Contract Preview">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <p class="text-muted">
+                            This is a preview of the contract that will be
+                            generated when the quotation is confirmed. No
+                            contract has been created yet.
+                        </p>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="pricelist_id" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date_start" readonly="1"/>
+                            <field name="recurring_rule_type" readonly="1"/>
+                            <field name="recurring_interval" readonly="1"/>
+                            <field name="recurring_invoicing_type" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Contract Lines">
+                            <field name="line_ids" readonly="1">
+                                <list create="false" delete="false" edit="false">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="uom_id"/>
+                                    <field name="price_unit"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="subtotal" sum="Total"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="total_amount" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <field name="sale_order_id" invisible="1"/>
+                </sheet>
+                <footer>
+                    <button string="Close" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sale_order_form_view_auto_contract" model="ir.ui.view">
+        <field name="name">sale.order.form.auto.contract</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Preview button in the header -->
+            <xpath expr="//header" position="inside">
+                <field name="has_contract_products_in_lines" invisible="1"/>
+                <button name="action_preview_auto_contract"
+                        type="object"
+                        string="Contract Preview"
+                        invisible="state not in ('draft', 'sent') or not has_contract_products_in_lines"
+                        help="Preview the annual recurring contract that will be generated upon confirmation."/>
+            </xpath>
+
+            <!-- Smart button to view generated contracts -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_auto_contracts"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o"
+                        invisible="auto_contract_count == 0">
+                    <field name="auto_contract_count" widget="statinfo" string="Contracts"/>
+                </button>
+            </xpath>
+
+            <!-- New tab: Contract Products -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Contract Products"
+                      name="auto_contract_products"
+                      invisible="not has_contract_products_in_lines and not auto_contract_line_ids">
+                    <div class="alert alert-info" role="alert">
+                        <p class="mb-1">
+                            These are the products that will be added to the
+                            recurring contract generated on confirmation.
+                            Unit prices are customer-specific and can be edited below.
+                        </p>
+                        <p class="mb-0">
+                            Lines are auto-populated from the products added to the
+                            quotation. Editing price, quantity or description marks
+                            a line as <b>manually edited</b> — it will then be kept
+                            even if the source product is removed from the quotation.
+                        </p>
+                    </div>
+                    <button name="action_sync_auto_contract_lines"
+                            type="object"
+                            string="Refresh from quotation"
+                            class="btn-link"
+                            icon="fa-refresh"
+                            invisible="state not in ('draft', 'sent')"/>
+                    <field name="auto_contract_line_ids"
+                           readonly="state not in ('draft', 'sent')">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="product_id"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="name"/>
+                            <field name="quantity"/>
+                            <field name="uom_id"
+                                   groups="uom.group_uom"
+                                   options="{'no_create': True}"/>
+                            <field name="price_unit"/>
+                            <field name="currency_id" column_invisible="1"/>
+                            <field name="subtotal" sum="Total" widget="monetary"/>
+                            <field name="manually_edited" optional="hide"/>
+                            <field name="source_order_line_id"
+                                   optional="hide"
+                                   options="{'no_create': True}"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

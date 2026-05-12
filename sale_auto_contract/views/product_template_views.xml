@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_template_form_view_auto_contract" model="ir.ui.view">
+        <field name="name">product.template.form.auto.contract</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Contract Products" name="auto_contract">
+                    <group>
+                        <field name="has_contract_products" invisible="1"/>
+                    </group>
+                    <p class="text-muted">
+                        When this product is added to a confirmed sale order,
+                        the products listed below will be added as lines of the
+                        generated annual recurring contract. The current
+                        product itself is <b>not</b> added to the contract.
+                    </p>
+                    <field name="contract_product_ids" nolabel="1">
+                        <list>
+                            <field name="display_name"/>
+                            <field name="default_code"/>
+                            <field name="list_price"/>
+                            <field name="uom_id"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
